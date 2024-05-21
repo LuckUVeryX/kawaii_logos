@@ -39,8 +39,9 @@ class KawaiiLogosCommandRunner extends CompletionCommandRunner<int> {
       );
 
     // Add sub commands
-    addCommand(CombineCommand(logger: _logger));
+    addCommand(SampleCommand(logger: _logger));
     addCommand(UpdateCommand(logger: _logger, pubUpdater: _pubUpdater));
+    addCommand(CombineCommand(logger: _logger));
   }
 
   @override
