@@ -57,6 +57,7 @@ class CombineCommand extends Command<int> {
         final pngFileContents = pngFile.readAsBytesSync();
         // Output to current directory in a `Kawaii_Logos` folder.
         final outputPath = argResults?['output'] ?? Directory.current.path;
+        _logger.info('Combining $pngFileName');
         final outputDir = Directory('$outputPath/Kawaii_Logos')
           ..createSync(recursive: true);
         File('${outputDir.path}/$pngFileName')
