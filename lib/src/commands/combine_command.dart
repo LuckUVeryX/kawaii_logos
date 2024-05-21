@@ -10,7 +10,13 @@ import 'package:mason_logger/mason_logger.dart';
 class CombineCommand extends Command<int> {
   CombineCommand({
     required Logger logger,
-  }) : _logger = logger;
+  }) : _logger = logger {
+    argParser.addOption(
+      'output',
+      abbr: 'o',
+      help: 'Output directory path. Defaults to present working directory',
+    );
+  }
 
   @override
   String get description => 'Combines all kawaii_logos assets into one folder.';
@@ -43,25 +49,28 @@ class CombineCommand extends Command<int> {
           .listSync(recursive: true)
           .whereType<File>()
           .where((file) => file.path.endsWith('.png'));
+      _logger.info('Found ${pngFiles.length} PNG files in ${dir.path}.');
 
       // Combine all .png files into one folder
       for (final pngFile in pngFiles) {
         final pngFileName = pngFile.path.split('/').last;
         final pngFileContents = pngFile.readAsBytesSync();
         // Output to current directory in a `Kawaii_Logos` folder.
-        final outputDir = Directory('${Directory.current.path}/Kawaii_Logos')
+        final outputPath = argResults?['output'] ?? Directory.current.path;
+        final outputDir = Directory('$outputPath/Kawaii_Logos')
           ..createSync(recursive: true);
         File('${outputDir.path}/$pngFileName')
           ..createSync(recursive: true)
           ..writeAsBytesSync(pngFileContents);
       }
+      _logger.info('Done.');
     } catch (e) {
       _logger.err('$e');
       return ExitCode.software.code;
     } finally {
       dir.deleteSync(recursive: true);
+      _logger.info('Deleted temporary directory ${dir.path}.');
     }
-
     return ExitCode.success.code;
   }
 }
