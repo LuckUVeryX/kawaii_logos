@@ -18,7 +18,7 @@ dev_dependencies:
   build_version: ^2.1.1
   mocktail: ^1.0.4
   test: ^1.25.7
-  very_good_analysis: ^5.1.0
+  very_good_analysis: ^6.0.0
 
 executables:
   kawaii_logos:
